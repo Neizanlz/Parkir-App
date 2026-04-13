@@ -183,7 +183,7 @@ while ($d = mysqli_fetch_assoc($data)) { $rows[] = $d; $total += $d['biaya_total
 <div class="actions-bar">
   <button class="btn btn-dark"  onclick="printAndBack()"><i class="fa-solid fa-print"></i> Print</button>
   <button class="btn btn-blue"  onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-  <button class="btn btn-gray"  onclick="downloadIMG()"><i class="fa-solid fa-image"></i> JPG</button>
+  <button class="btn btn-gray"  onclick="downloadExcel()"><i class="fa-solid fa-file-excel"></i> Excel</button>
   <a href="rekap.php?tgl1=<?= $tgl1 ?>&tgl2=<?= $tgl2 ?>" class="btn btn-back">
     <i class="fa-solid fa-arrow-left"></i> Kembali
   </a>
@@ -245,8 +245,9 @@ while ($d = mysqli_fetch_assoc($data)) { $rows[] = $d; $total += $d['biaya_total
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 const backUrl = 'rekap.php?tgl1=<?= $tgl1 ?>&tgl2=<?= $tgl2 ?>';
 
@@ -254,14 +255,19 @@ function printAndBack() {
     window.print();
     setTimeout(() => { window.location = backUrl; }, 500);
 }
-function downloadIMG() {
-    html2canvas(document.getElementById("areaCetak")).then(canvas => {
-        const a = document.createElement("a");
-        a.download = "laporan.jpg";
-        a.href = canvas.toDataURL("image/jpeg");
-        a.click();
-        setTimeout(() => { window.location = backUrl; }, 1000);
-    });
+function downloadExcel() {
+    const rows = <?= json_encode(array_map(fn($d) => [
+        'ID Parkir'     => $d['id_parkir'],
+        'Waktu Keluar'  => $d['waktu_keluar'],
+        'Biaya Total'   => (int)$d['biaya_total'],
+    ], $rows)) ?>;
+    rows.push({});
+    rows.push({ 'ID Parkir': 'TOTAL PENDAPATAN', 'Waktu Keluar': '', 'Biaya Total': <?= (int)$total ?> });
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Laporan');
+    XLSX.writeFile(wb, 'laporan.xlsx');
+    setTimeout(() => { window.location = backUrl; }, 1000);
 }
 function downloadPDF() {
     html2canvas(document.getElementById("areaCetak")).then(canvas => {
