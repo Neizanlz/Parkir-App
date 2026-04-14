@@ -22,6 +22,13 @@ if (isset($_GET['hapus'])) {
 }
 
 $data = mysqli_query($conn, "SELECT * FROM tarif ORDER BY id_tarif DESC");
+$sudahAda = [];
+$cekJenis = mysqli_query($conn, "SELECT jenis_kendaraan FROM tarif");
+while ($j = mysqli_fetch_assoc($cekJenis)) { $sudahAda[] = $j['jenis_kendaraan']; }
+
+$jenisResult = mysqli_query($conn, "SELECT DISTINCT jenis_kendaraan FROM kendaraan ORDER BY jenis_kendaraan");
+$semuaJenis = [];
+while ($j = mysqli_fetch_assoc($jenisResult)) { $semuaJenis[] = $j['jenis_kendaraan']; }
 $badge = ['motor' => 'badge-green', 'mobil' => 'badge-blue', 'lainnya' => 'badge-violet'];
 ?>
 <!DOCTYPE html>
@@ -55,9 +62,11 @@ $badge = ['motor' => 'badge-green', 'mobil' => 'badge-blue', 'lainnya' => 'badge
         <div class="col-12 col-md-5">
           <label>Jenis Kendaraan</label>
           <select name="jenis_kendaraan" class="form-select" required>
-            <option value="motor">Motor</option>
-            <option value="mobil">Mobil</option>
-            <option value="lainnya">Lainnya</option>
+            <?php foreach($semuaJenis as $val): ?>
+            <?php if(!in_array($val, $sudahAda)): ?>
+            <option value="<?= $val ?>"><?= ucfirst($val) ?></option>
+            <?php endif; ?>
+            <?php endforeach; ?>
           </select>
         </div>
         <div class="col-12 col-md-4">

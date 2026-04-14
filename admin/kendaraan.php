@@ -68,11 +68,7 @@ $badge = ['motor' => 'badge-green', 'mobil' => 'badge-blue', 'lainnya' => 'badge
         </div>
         <div class="col-12 col-md-3">
           <label>Jenis Kendaraan</label>
-          <select name="jenis_kendaraan" class="form-select" required>
-            <option value="motor">Motor</option>
-            <option value="mobil">Mobil</option>
-            <option value="lainnya">Lainnya</option>
-          </select>
+          <input type="text" name="jenis_kendaraan" class="form-control" placeholder="Contoh: motor, mobil" required>
         </div>
         <div class="col-12 col-md-3">
           <label>Warna</label>

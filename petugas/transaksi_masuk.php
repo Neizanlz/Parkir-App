@@ -13,7 +13,7 @@ $area = mysqli_query($conn, "
 $kendaraan = mysqli_query($conn, "
     SELECT id_kendaraan, plat_nomor, jenis_kendaraan FROM kendaraan
     WHERE id_kendaraan NOT IN (
-        SELECT id_kendaraan FROM transaksi
+        SELECT id_kendaraan FROM transaksi WHERE status='masuk'
     )
     ORDER BY plat_nomor ASC
 ");
@@ -132,8 +132,7 @@ if (isset($_POST['simpan'])) {
 function isiJenis(select) {
     const opt   = select.options[select.selectedIndex];
     const jenis = opt.dataset.jenis || '';
-    const map   = { motor: 'Motor', mobil: 'Mobil', lainnya: 'Lainnya' };
-    document.getElementById('jenis_display').value = map[jenis] || '';
+    document.getElementById('jenis_display').value = jenis ? jenis.charAt(0).toUpperCase() + jenis.slice(1) : '';
 }
 </script>
 

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3308
--- Generation Time: Apr 08, 2026 at 09:53 AM
--- Server version: 8.0.30
--- PHP Version: 8.2.30
+-- Waktu pembuatan: 14 Apr 2026 pada 18.51
+-- Versi server: 8.0.30
+-- Versi PHP: 8.2.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_parkir`
+-- Basis data: `parkir_app`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `area_parkir`
+-- Struktur dari tabel `area_parkir`
 --
 
 CREATE TABLE `area_parkir` (
@@ -35,18 +35,18 @@ CREATE TABLE `area_parkir` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `area_parkir`
+-- Dumping data untuk tabel `area_parkir`
 --
 
 INSERT INTO `area_parkir` (`id_area`, `nama_area`, `kapasitas`, `terisi`) VALUES
-(1, 'Area Basement BTM', 50, 1),
+(1, 'Area Basement BTM', 50, 0),
 (3, 'vvip', 10, 0),
 (7, 'VVIP B', 66, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kendaraan`
+-- Struktur dari tabel `kendaraan`
 --
 
 CREATE TABLE `kendaraan` (
@@ -59,7 +59,7 @@ CREATE TABLE `kendaraan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `kendaraan`
+-- Dumping data untuk tabel `kendaraan`
 --
 
 INSERT INTO `kendaraan` (`id_kendaraan`, `plat_nomor`, `jenis_kendaraan`, `warna`, `pemilik`, `id_user`) VALUES
@@ -70,7 +70,7 @@ INSERT INTO `kendaraan` (`id_kendaraan`, `plat_nomor`, `jenis_kendaraan`, `warna
 -- --------------------------------------------------------
 
 --
--- Table structure for table `log_aktivitas`
+-- Struktur dari tabel `log_aktivitas`
 --
 
 CREATE TABLE `log_aktivitas` (
@@ -81,7 +81,7 @@ CREATE TABLE `log_aktivitas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `log_aktivitas`
+-- Dumping data untuk tabel `log_aktivitas`
 --
 
 INSERT INTO `log_aktivitas` (`id_log`, `id_user`, `aktivitas`, `waktu_aktivitas`) VALUES
@@ -127,33 +127,36 @@ INSERT INTO `log_aktivitas` (`id_log`, `id_user`, `aktivitas`, `waktu_aktivitas`
 (220, 9, 'Melihat rekap transaksi', '2026-04-08 16:48:39'),
 (221, 9, 'Membuka dashboard owner', '2026-04-08 16:48:44'),
 (222, 9, 'Melihat rekap transaksi', '2026-04-08 16:48:47'),
-(223, 9, 'Membuka dashboard owner', '2026-04-08 16:48:50');
+(223, 9, 'Membuka dashboard owner', '2026-04-08 16:48:50'),
+(224, 6, 'Menambah tarif truk sebesar 5000', '2026-04-15 01:32:03'),
+(225, 6, 'Login ke sistem sebagai admin', '2026-04-15 01:43:05');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tarif`
+-- Struktur dari tabel `tarif`
 --
 
 CREATE TABLE `tarif` (
   `id_tarif` int NOT NULL,
-  `jenis_kendaraan` enum('motor','mobil','lainnya') NOT NULL,
+  `jenis_kendaraan` varchar(50) NOT NULL,
   `tarif_per_jam` decimal(10,0) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `tarif`
+-- Dumping data untuk tabel `tarif`
 --
 
 INSERT INTO `tarif` (`id_tarif`, `jenis_kendaraan`, `tarif_per_jam`) VALUES
 (5, 'motor', 2000),
 (6, 'mobil', 10000),
-(8, 'lainnya', 15000);
+(8, 'lainnya', 15000),
+(9, 'truk', 5000);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `transaksi`
+-- Struktur dari tabel `transaksi`
 --
 
 CREATE TABLE `transaksi` (
@@ -170,7 +173,7 @@ CREATE TABLE `transaksi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `transaksi`
+-- Dumping data untuk tabel `transaksi`
 --
 
 INSERT INTO `transaksi` (`id_parkir`, `id_kendaraan`, `waktu_masuk`, `waktu_keluar`, `id_tarif`, `durasi_jam`, `biaya_total`, `status`, `id_user`, `id_area`) VALUES
@@ -181,7 +184,7 @@ INSERT INTO `transaksi` (`id_parkir`, `id_kendaraan`, `waktu_masuk`, `waktu_kelu
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Struktur dari tabel `user`
 --
 
 CREATE TABLE `user` (
@@ -194,7 +197,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `user`
+-- Dumping data untuk tabel `user`
 --
 
 INSERT INTO `user` (`id_user`, `nama_lengkap`, `username`, `password`, `role`, `status_aktif`) VALUES
@@ -204,36 +207,36 @@ INSERT INTO `user` (`id_user`, `nama_lengkap`, `username`, `password`, `role`, `
 (11, 'nesa', 'nes', 'nesa123', 'owner', 1);
 
 --
--- Indexes for dumped tables
+-- Indeks untuk tabel yang dibuang
 --
 
 --
--- Indexes for table `area_parkir`
+-- Indeks untuk tabel `area_parkir`
 --
 ALTER TABLE `area_parkir`
   ADD PRIMARY KEY (`id_area`);
 
 --
--- Indexes for table `kendaraan`
+-- Indeks untuk tabel `kendaraan`
 --
 ALTER TABLE `kendaraan`
   ADD PRIMARY KEY (`id_kendaraan`);
 
 --
--- Indexes for table `log_aktivitas`
+-- Indeks untuk tabel `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
   ADD PRIMARY KEY (`id_log`),
   ADD KEY `id_user` (`id_user`);
 
 --
--- Indexes for table `tarif`
+-- Indeks untuk tabel `tarif`
 --
 ALTER TABLE `tarif`
   ADD PRIMARY KEY (`id_tarif`);
 
 --
--- Indexes for table `transaksi`
+-- Indeks untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id_parkir`),
@@ -243,64 +246,64 @@ ALTER TABLE `transaksi`
   ADD KEY `id_area` (`id_area`);
 
 --
--- Indexes for table `user`
+-- Indeks untuk tabel `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id_user`),
   ADD UNIQUE KEY `username` (`username`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `area_parkir`
+-- AUTO_INCREMENT untuk tabel `area_parkir`
 --
 ALTER TABLE `area_parkir`
   MODIFY `id_area` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `kendaraan`
+-- AUTO_INCREMENT untuk tabel `kendaraan`
 --
 ALTER TABLE `kendaraan`
   MODIFY `id_kendaraan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
--- AUTO_INCREMENT for table `log_aktivitas`
+-- AUTO_INCREMENT untuk tabel `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
-  MODIFY `id_log` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=224;
+  MODIFY `id_log` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=226;
 
 --
--- AUTO_INCREMENT for table `tarif`
+-- AUTO_INCREMENT untuk tabel `tarif`
 --
 ALTER TABLE `tarif`
-  MODIFY `id_tarif` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_tarif` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `transaksi`
+-- AUTO_INCREMENT untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   MODIFY `id_parkir` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
   MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `log_aktivitas`
+-- Ketidakleluasaan untuk tabel `log_aktivitas`
 --
 ALTER TABLE `log_aktivitas`
   ADD CONSTRAINT `log_aktivitas_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `transaksi`
+-- Ketidakleluasaan untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD CONSTRAINT `transaksi_ibfk_1` FOREIGN KEY (`id_kendaraan`) REFERENCES `kendaraan` (`id_kendaraan`) ON DELETE CASCADE ON UPDATE CASCADE,

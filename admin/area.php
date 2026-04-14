@@ -15,7 +15,12 @@ if (isset($_GET['hapus'])) {
     mysqli_query($conn, "DELETE FROM area_parkir WHERE id_area=".(int)$_GET['hapus']);
 }
 
-$data = mysqli_query($conn, "SELECT * FROM area_parkir ORDER BY id_area DESC");
+$data = mysqli_query($conn, "
+    SELECT a.id_area, a.nama_area, a.kapasitas,
+           (SELECT COUNT(*) FROM transaksi t WHERE t.id_area=a.id_area AND t.status='masuk') AS terisi
+    FROM area_parkir a
+    ORDER BY a.id_area DESC
+");
 ?>
 <!DOCTYPE html>
 <html lang="id">
